@@ -1,20 +1,20 @@
-const _crypto = require('crypto');
-globalThis.crypto = _crypto;
-globalThis.crypto.getRandomValues = (arr) => _crypto.randomFillSync(arr);
+const express = require('express');
+const router = express.Router();
 
-var express = require('express');
-var router = express.Router();
-// 接続情報を設定
-const { MongoClient } = require("mongodb");
-const uri = "***i";
-const client = new MongoClient(uri);
-router.get('/', async (req, res) => {
-// データベース、コレクションを指定
-const database = client.db('notes');
-const notes = database.collection('notes');
-// idが１のドキュメントを取得
-const query = {};
-const note = await notes.findOne(query);
-res.json(note);
-})
+router.get('/', async function(req, res, next) {
+
+  const response = await fetch('https://dog.ceo/api/breeds/image/random');
+  const data = await response.json();
+
+  res.send(`
+    <html>
+      <body>
+        <h1>Dog API</h1>
+        <img src="${data.message}" width="400">
+      </body>
+    </html>
+  `);
+
+});
+
 module.exports = router;
